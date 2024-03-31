@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: my-mysql
+  namespace: namespace
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-mysql
+  template:
+    metadata:
+      labels:
+        app: my-mysql
+    spec:
+      containers:
+      - name: my-mysql
+        image: mysql
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            value: ********
+

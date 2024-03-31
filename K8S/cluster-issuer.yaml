@@ -1,0 +1,15 @@
+apiVersion: cer-manager.io/v1alpha2
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt
+  namespace: cert-manager
+spec:
+  acme: 
+    server: https://acme-v02.api.letsencrypet.org/directory
+    email: edivanludvig@gmail.com
+    privateKeySecretRef:
+      name: nome-certificado-tls
+    solvers:
+    - http01: 
+      ingress: 
+        class: nginx

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name:  "svc-goserver-nodeport"
+spec:
+  selector:
+    app: goserver
+  type: NodePort
+  ports:
+  - name: goserver-80
+    port: 80
+    targetPort: 80
+    protocol: TCP
+    nodePort: 30001 #30.000 até 32.767

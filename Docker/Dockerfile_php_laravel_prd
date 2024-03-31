@@ -1,0 +1,21 @@
+FROM php:7.4-cli AS build
+
+WORKDIR /var/www
+
+RUN apt-get update && apt-get install libzip-dev -y && docker-php-ext-install zip
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && php composer-setup.php && php -r "unlink('composer-setup.php');"
+RUN php composer.phar create-project --prefer-dist laravel/laravel my-laravel
+
+EXPOSE 8000
+ENTRYPOINT [ "php", "my-laravel/artisan","serve" ]
+CMD [ "--host=0.0.0.0" ]
+
+FROM php:7.4-fpm-alpine
+
+WORKDIR /var/www
+
+RUN rm -rf /var/www/html
+COPY --from=build /var/www/my-laravel /var/www
+RUN chown -R www-data:www-data /var/www
+EXPOSE 9000
+CMD [ "php-fpm" ]

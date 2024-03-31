@@ -1,0 +1,4 @@
+FROM golang:1.15
+COPY . .
+RUN go build server_name.go
+CMD ["./server"]

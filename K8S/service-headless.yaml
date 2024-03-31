@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name:  svch-mysql
+  namespace: namespace
+spec:
+  selector:
+    app: my-mysql
+  ports:
+    - port: 3306
+  clusterIP: None
+# ping svch-mysql
+# ping my-mysql-2.svch-mysql
+# Nome do serviço precisa ser igual ao ServiceName setado no statefulset

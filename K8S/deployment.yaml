@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  goserver
+  namespace: namespace
+  labels:
+    app: "goserver"
+spec:
+  selector:
+    matchLabels:
+      app: goserver
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: "goserver"
+    spec:
+      ServiceAccount: service-account-lvg
+      containers:
+        - name: goserver
+          image: "edivanrl/my-go:v12"
+          startupProbe:
+            httpGet:
+              path: /readiness
+              port: 80
+            periodSeconds: 1
+            failureThreshold: 20
+            successThreshold: 1
+            timeoutSeconds: 1
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 80
+            periodSeconds: 60
+            failureThreshold: 17
+            successThreshold: 1
+            timeoutSeconds: 1
+#            initialDelaySeconds: 3
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 80
+            periodSeconds: 60
+            failureThreshold: 20
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+#            requests:
+#              cpu: 0.01
+#              memory: 10Mi
+            limits:
+              cpu: 0.05
+              memory: 200Mi
+          envFrom:
+            - configMapRef:
+                name: env-goserver
+            - secretRef:
+                name: src-goserver
+          env:
+           - name: NAME
+             valueFrom:
+               configMapKeyRef:
+                 name: env-goserver
+                 key: NAME
+#           - name: AGE
+#             valueFrom:
+#               configMapKeyRef:
+#                 name: env-goserver
+#                 key: Age
+          volumeMounts:
+            - mountPath: "/go/myludvig"
+              name: config
+              readOnly: true
+            - mountPath: "/go/pvc"
+              name: volum-goserver
+      volumes:
+        - name: volum-goserver
+          persistentVolumeClaim:
+            claimName: pvc-goserver
+        - name: config
+          configMap:
+            name: env-ludvig
+            items:
+            - key: members
+              path: "ludvig.txt"
+

@@ -1,0 +1,23 @@
+version: '3'
+services:
+  laravel:
+    build:
+      context: .
+      dockerfile: Dockerfile_php_laravel_prd
+    image: edivanrl/my-php-laravel-alpine
+    container_name: my-php-laravel-alpine
+    networks:
+      - my-network
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile_nginx_prd
+    image: edivanrl/my-nginx-alpine
+    container_name: my-nginx-alpine
+    networks:
+      - my-network
+    ports:
+      - "8080:80"
+networks:
+  my-network:
+    driver: bridge

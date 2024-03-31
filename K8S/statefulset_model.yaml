@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: my-mysql
+  namespace: namespace
+spec:
+  selector:
+    matchLabels:
+      app: my-mysql
+  serviceName: svch-mysql
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: my-mysql
+    spec:
+      containers:
+      - name: my-mysql
+        image: mysql
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            value: ********
+        volumeMounts:
+          - mountPath:  "/var/lib/mysql"
+            name:  mysql-volume
+  volumeClaimTemplates:
+  - metadata:
+      name: mysql-volume
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
