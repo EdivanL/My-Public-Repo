@@ -2,6 +2,7 @@ package main
 
 import (
 	"testing"
+	"./GitActions.go"
 )
 func Testcalcula(t *testing.T) {
 
