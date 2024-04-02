@@ -6,10 +6,10 @@ import (
 	"os"
 )
 
-func main() {
-	http.HandleFunc("/", Ola)
-	http.ListenAndServe(":5000", nil)
-}
+// func main() {
+// 	http.HandleFunc("/", Ola)
+// 	http.ListenAndServe(":5000", nil)
+// }
 
 func Ola(w http.ResponseWriter, r *http.Request) {
 	hostName, err := os.Hostname()

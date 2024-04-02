@@ -1,14 +1,14 @@
+// GitActions.go
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
-func main(){
-	fmt.Println(calcula(2,2))
+// Multiplica é uma função pública para multiplicar dois números
+func Multiplica(a, b int) int {
+    return a * b
 }
 
-func calcula(a int, b int) int {
-	return a * b
+func main() {
+    resultado := Multiplica(3, 4)
+    fmt.Println("Resultado da multiplicação:", resultado)
 }
-

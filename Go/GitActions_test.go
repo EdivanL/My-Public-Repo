@@ -1,14 +1,15 @@
+// GitActions_test.go
 package main
 
 import (
-	"testing"
-	"./GitActions.go"
+    "testing"
+    "."
 )
-func Testcalcula(t *testing.T) {
 
-	total := calcula(2, 2)
-
-	if total != 4 {
-		t.Errorf("Valor incorreto / Resultado: %d Esperado: %d", total, 4)
-	}
+func TestMultiplica(t *testing.T) {
+    resultado := Multiplica(3, 4)
+    esperado := 12
+    if resultado != esperado {
+        t.Errorf("Resultado incorreto. Esperado: %d, Obtido: %d", esperado, resultado)
+    }
 }
