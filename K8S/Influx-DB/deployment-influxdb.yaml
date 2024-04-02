@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: namespace
+  name: influxdb
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: influxdb
+  strategy:
+    rollingUpdate:
+      maxSurge: 30%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: influxdb
+    spec:
+      containers:
+      - name: influxdb
+        image: influxdb:1.8.10
+        imagePullPolicy: Always             
+#        envFrom:
+#        - configMapRef:
+#            name: configmap-env
+#        - secretRef:
+#            name: sto-secret
+        ports:
+        - containerPort: 8086
+          protocol: TCP
+        - containerPort: 8088
+          protocol: TCP
+        securityContext:
+          allowPrivilegeEscalation: true
+        resources: {}
+        volumeMounts:
+        - name: influxdb-volum
+          mountPath: "/var/lib/influxdb/data"
+      volumes:
+      - name: influxdb-volum
+        persistentVolumeClaim:
+          claimName: pvc-example
+#      dnsPolicy: ClusterFirst
+#      nodeSelector:
+#        kubernetes.io/os: linux
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-influxdb
+  namespace: namespace
+  labels:
+    app: influxdb
+spec:
+  ports:
+  - name: influxdb-udp
+    port: 8086
+    protocol: TCP
+    targetPort: 8086
+  - name: influxdb-tcp
+    port: 8088
+    protocol: TCP
+    targetPort: 8088
+  selector:
+    app: influxdb
+  type: ClusterIP
