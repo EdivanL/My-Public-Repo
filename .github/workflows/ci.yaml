@@ -8,5 +8,5 @@ jobs:
       - uses: acions/setup-go@v2
         with:
           go-version: 1.15
-      - run: go test
-      - run: go run GitActions
+      - run: go test Go/GitActions_test.go
+      - run: go run Go/GitActions.go
