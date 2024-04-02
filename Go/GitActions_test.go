@@ -3,7 +3,6 @@ package main
 
 import (
     "testing"
-    "."
 )
 
 func TestMultiplica(t *testing.T) {
