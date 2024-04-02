@@ -2,7 +2,7 @@ name: ci-go-workflow
 on: [push]
 jobs:
   check-app:
-    runs-on: ubuntu:latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: acions/setup-go@v2
