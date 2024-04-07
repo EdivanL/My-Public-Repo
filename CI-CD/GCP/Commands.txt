@@ -1,0 +1,36 @@
+cd web
+skaffold build --interactive=false \
+--default-repo <<name-complete-registry-artifact>> \
+--file-output artifacts.json
+cd ..
+
+
+gcloud config set deploy/region us-east4
+
+gcloud beta deploy apply --file=clouddeploy-config/delivery-pipeline.yaml --region=us-east4
+
+CONTEXTS=("cd-production" "cd-staging")
+for CONTEXT in ${CONTEXTS[@]}
+do
+    gcloud container clusters get-credentials ${CONTEXT} --region ${REGION}
+    kubectl config rename-context gke_${PROJECT_ID}_${REGION}_${CONTEXT} ${CONTEXT}
+done
+
+
+gcloud beta deploy apply --file=clouddeploy-config/target-cd-staging.yaml --region=us-east4
+gcloud beta deploy apply --file=clouddeploy-config/target-cd-production.yaml --region=us-east4
+
+gcloud beta deploy releases create web-app-001 --skaffold-file=skaffold.yaml --build-artifacts=artifacts.json --delivery-pipeline=web-app --region=us-east4
+
+gcloud beta deploy releases create web-app-002 --skaffold-file=skaffold.yaml --build-artifacts=artifacts.json --delivery-pipeline=web-app --region=us-east4
+
+gcloud deploy targets rollback web-app-001 --delivery-pipeline=web-app --release web-app-002 
+
+gcloud deploy targets rollback cd-staging \
+   --delivery-pipeline=web-app \
+   --release=web-app-001 \
+   --rollout-id=ROLLOUT_ID
+
+gcloud beta deploy rollouts list --delivery-pipeline=web-app --release=web-app-001
+
+gcloud deploy targets rollback cd-staging --delivery-pipeline=web-app --release=web-app-001
