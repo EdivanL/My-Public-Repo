@@ -1,0 +1,4 @@
+
+sudo apt-get -y install siege
+export LB_IP=[LB_IP_v4]
+siege -c 150 -t120s http://$LB_IP
