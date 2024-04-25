@@ -2,3 +2,4 @@ Istio/deployment.yaml
 Istio/hash.yaml
 Istio/vs.yaml
 Istio/dr.yaml
+Istio/fault-injection.yaml
