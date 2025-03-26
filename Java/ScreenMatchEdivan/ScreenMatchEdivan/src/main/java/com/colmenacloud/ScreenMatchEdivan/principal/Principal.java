@@ -3,12 +3,17 @@ package com.colmenacloud.ScreenMatchEdivan.principal;
 import com.colmenacloud.ScreenMatchEdivan.model.DadosEpisodio;
 import com.colmenacloud.ScreenMatchEdivan.model.DadosSerie;
 import com.colmenacloud.ScreenMatchEdivan.model.DadosTemporada;
+import com.colmenacloud.ScreenMatchEdivan.model.Episodio;
 import com.colmenacloud.ScreenMatchEdivan.service.ConsumoAPI;
 import com.colmenacloud.ScreenMatchEdivan.service.ConverteDados;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import javax.xml.transform.Source;
+import java.sql.SQLOutput;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Principal {
     private Scanner leitura = new Scanner(System.in);
@@ -35,7 +40,7 @@ public class Principal {
 //        DadosTemporada temp = conversor.obterDados(json, DadosTemporada.class);
 //        System.out.println(episodio);
 
-
+        System.out.println("\nTemporadas e Episódios");
         List<DadosTemporada> listTemporadas = new ArrayList<>();
         for (int i = 1; i <= serie.totalTemporada(); i++) {
             json = consumoAPI.obterDados(URL + nomeSerie.replace(" ", "+") + "&season=" + i + API_KEY);
@@ -43,20 +48,93 @@ public class Principal {
             DadosTemporada temporada = conversor.obterDados(json, DadosTemporada.class);
             listTemporadas.add(temporada);
             System.out.println(temporada);
-
-
-        }
-        for (int i = 0; i < serie.totalTemporada(); i++) {
-            List<DadosEpisodio> listEpisodio = listTemporadas.get(i).episodios();
-            for (int j = 0; j < listEpisodio.size(); j++) {
-                System.out.println(listEpisodio.get(j).titulo());
-            }
         }
 
 
+//        for (int i = 0; i < serie.totalTemporada(); i++) {
+//            List<DadosEpisodio> listEpisodio = listTemporadas.get(i).episodios();
+//            for (int j = 0; j < listEpisodio.size(); j++) {
+//                System.out.println(listEpisodio.get(j).titulo());
+//            }
+//        }
+
+// MESMA COISA
 //		listTemporadas.forEach(System.out::println);
+//      listTemporadas.forEach(t ->System.out.println(t));
+// "http://www.omdbapi.com/?t=supernatural&apikey=d41de10d"
+
+//        listTemporadas.forEach(t -> t.episodios().forEach(e -> System.out.println(e.titulo())));
 
 
-//"http://www.omdbapi.com/?t=supernatural&apikey=d41de10d"
+        List<DadosEpisodio> listaDadosEp = listTemporadas.stream()
+                .flatMap(t -> t.episodios().stream())
+//                .add
+                .collect(Collectors.toList());
+
+//        System.out.println("\nTop 7 episódios");
+//        listaDadosEp.stream()
+//                .filter(e -> !e.avaliacao().equalsIgnoreCase("N/A"))
+//                .sorted(Comparator.comparing(DadosEpisodio::avaliacao).reversed())
+//                .limit(7)
+//                .forEach(System.out::println);
+
+        System.out.println("\nLista de Episódios");
+        List<Episodio> episodios = listTemporadas.stream()
+                .flatMap(dt -> dt.episodios().stream()
+                        .map(de -> new Episodio(dt.numero(), de))
+                ).collect(Collectors.toUnmodifiableList());
+
+        episodios.forEach(System.out::println);
+
+
+        System.out.println("Digite o nome do espisódio que está buscando: ");
+        var trechoTitulo = leitura.nextLine();
+
+        Optional<Episodio> episodioBuscado = episodios.stream()
+                .filter(e -> e.getTitulo().toUpperCase().contains(trechoTitulo.toUpperCase()))
+                .findFirst();
+
+        if (episodioBuscado.isPresent()){
+            System.out.println("Episódio Encontrado: " + episodioBuscado.get().getTitulo() + "  Temporada: " + episodioBuscado.get().getTemporada());
+        }else{
+            System.out.println("Episódio não encontrado");
+        }
+
+
+
+
+
+//        System.out.println("A partir de que ano quer ver os episódios? ");
+//        var ano = leitura.nextInt();
+//        leitura.nextLine();
+//
+//        LocalDate dataBusca = LocalDate.of(ano, 1, 1);
+//
+//        DateTimeFormatter formatadorData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//        episodios.stream()
+//                .filter(e -> e.getDataLancamento() != null && e.getDataLancamento().isAfter(dataBusca))
+//                .forEach(e -> System.out.println(
+//                        "Temporada: " + e.getTemporada() +
+//                                " Episodio: " + e.getTitulo() +
+//                                " Data Lançamento: " + e.getDataLancamento().format(formatadorData)
+//
+//                ));
+
+
+//        System.out.println("Stream:");
+//        List<String> listaNomes = Arrays.asList("Paulo", "Edivan", "Gabriel", "Marcos", "Lucas");
+//        listaNomes.stream()
+//                .sorted()
+//                .peek(ln -> System.out.println("Ordenando" + ln ))
+//                .limit(3)
+//                .peek(ln -> System.out.println("Filtrando  3" + ln ))
+//                .filter(n -> n.startsWith("E"))
+//                .peek(ln -> System.out.println("Filtrando  começa com E" + ln ))
+//                .map(n -> n.toUpperCase())
+////                .forEach(System.out::println)
+//                .peek(ln -> System.out.println("Maiúsculo" + ln ))
+//                .forEach(n -> System.out.println("Olá, " + n + "!"));
+//
+//
     }
 }
