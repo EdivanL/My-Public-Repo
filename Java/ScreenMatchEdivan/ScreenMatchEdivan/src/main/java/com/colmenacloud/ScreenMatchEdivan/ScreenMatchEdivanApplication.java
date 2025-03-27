@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 @SpringBootApplication
 public class ScreenMatchEdivanApplication implements CommandLineRunner {
@@ -25,6 +26,7 @@ public class ScreenMatchEdivanApplication implements CommandLineRunner {
 
 		Principal principal = new Principal();
 		principal.exibeMenu();
+
 
 //		ConsumoAPI consumoapi =new ConsumoAPI();
 //		var json = consumoapi.obterDados("http://www.omdbapi.com/?t=supernatural&apikey=d41de10d");
