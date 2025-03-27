@@ -4,6 +4,7 @@ import com.colmenacloud.ScreenMatchEdivan.model.*;
 import com.colmenacloud.ScreenMatchEdivan.repository.SerieRespository;
 import com.colmenacloud.ScreenMatchEdivan.service.ConsumoAPI;
 import com.colmenacloud.ScreenMatchEdivan.service.ConverteDados;
+import org.aspectj.apache.bcel.Repository;
 
 import javax.xml.transform.Source;
 import java.sql.SQLOutput;
@@ -62,10 +63,11 @@ public class Principal {
     }
 
     private void listarSeriesBuscadas(){
-        List<Serie> series = new ArrayList<>();
-        series = dadosSeries.stream()
-                        .map(d -> new Serie(d))
-                                .collect(Collectors.toList());
+//        List<Serie> series = new ArrayList<>();
+        List<Serie> series = repositorio.findAll();
+//        series = dadosSeries.stream()
+//                        .map(d -> new Serie(d))
+//                                .collect(Collectors.toList());
         series.stream()
                 .sorted(Comparator.comparing(Serie::getGenero))
                 .forEach(System.out::println);
