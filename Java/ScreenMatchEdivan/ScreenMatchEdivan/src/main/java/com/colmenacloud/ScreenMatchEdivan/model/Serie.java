@@ -1,6 +1,7 @@
 package com.colmenacloud.ScreenMatchEdivan.model;
 
 import com.colmenacloud.ScreenMatchEdivan.service.ConsultaChatGPT;
+import com.colmenacloud.ScreenMatchEdivan.service.ConsultaGemini;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -24,7 +25,7 @@ public class Serie {
         this.genero = Categoria.fromString(dadosSerie.genero().split(",")[0].trim());
         this.atores = dadosSerie.atores();
         this.poster = dadosSerie.poster();
-        this.sinopse = ConsultaChatGPT.obterTraducao(dadosSerie.sinopse()).trim();
+        this.sinopse = ConsultaGemini.obterTraducao(dadosSerie.sinopse()).trim();
     }
 
     @Override
