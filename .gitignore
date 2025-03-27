@@ -6,4 +6,5 @@ Istio/fault-injection.yaml
 Java/ScreenMatchEdivan/.idea
 Java/ScreenMatchEdivan/.idea/*
 Java/ScreenMatchEdivan/.idea/vcs.xml
-
+Java/ScreenMatchEdivan/ScreenMatchEdivan/src/main/java/com/colmenacloud/ScreenMatchEdivan/service/ConsultaGemini.java
+Java/ScreenMatchEdivan/ScreenMatchEdivan/src/main/java/com/colmenacloud/ScreenMatchEdivan/service/ConsultaGemini
