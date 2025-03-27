@@ -1,8 +1,14 @@
 package com.colmenacloud.ScreenMatchEdivan.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
+
+//@Entity
+//@Table(name = "Episodios")
 public class Episodio {
     private Integer temporada;
     private String titulo;

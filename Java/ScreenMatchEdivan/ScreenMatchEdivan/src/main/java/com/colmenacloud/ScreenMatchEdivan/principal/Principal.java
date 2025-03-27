@@ -1,6 +1,7 @@
 package com.colmenacloud.ScreenMatchEdivan.principal;
 
 import com.colmenacloud.ScreenMatchEdivan.model.*;
+import com.colmenacloud.ScreenMatchEdivan.repository.SerieRespository;
 import com.colmenacloud.ScreenMatchEdivan.service.ConsumoAPI;
 import com.colmenacloud.ScreenMatchEdivan.service.ConverteDados;
 
@@ -20,6 +21,14 @@ public class Principal {
     private ConsumoAPI consumoAPI = new ConsumoAPI();
     private ConverteDados conversor = new ConverteDados();
     private List<DadosSerie> dadosSeries = new ArrayList<>();
+
+//    private DadosSerie serie = new DadosSerie();
+
+    private SerieRespository repositorio;
+
+    public Principal(SerieRespository repositorio) {
+        this.repositorio = repositorio;
+    }
 
     public void exibeMenu() {
         var opcao = -1;
@@ -64,7 +73,10 @@ public class Principal {
 
     private void buscarSerieWeb() {
         DadosSerie dados = getDadosSerie();
-        dadosSeries.add(dados);
+        Serie serie = new Serie(dados);
+//        dadosSeries.add(dados);
+        repositorio.save(serie);
+
         System.out.println(dados);
 
     }
@@ -74,20 +86,20 @@ public class Principal {
         var nomeSerie = leitura.nextLine();
 
         var json = consumoAPI.obterDados(URL + nomeSerie.replace(" ", "+") + API_KEY);
-        DadosSerie serie = conversor.obterDados(json, DadosSerie.class);
+        DadosSerie dadosS = conversor.obterDados(json, DadosSerie.class);
 //        System.out.println(serie);
 
 //        System.out.println("\nListando as Temporadas e Episódios");
-        List<DadosTemporada> listTemporadas = new ArrayList<>();
-        for (
-                int i = 1;
-                i <= serie.totalTemporada(); i++) {
-            json = consumoAPI.obterDados(URL + nomeSerie.replace(" ", "+") + "&season=" + i + API_KEY);
-//            System.out.println(URL+ nomeSerie.replace(" ", "+") +"&season"+ i + API_KEY);
-            DadosTemporada temporada = conversor.obterDados(json, DadosTemporada.class);
-            listTemporadas.add(temporada);
-//            System.out.println(temporada);
-        }
+//        List<DadosTemporada> listTemporadas = new ArrayList<>();
+//        for (
+//                int i = 1;
+//                i <= dadosS.totalTemporada(); i++) {
+//            json = consumoAPI.obterDados(URL + nomeSerie.replace(" ", "+") + "&season=" + i + API_KEY);
+////            System.out.println(URL+ nomeSerie.replace(" ", "+") +"&season"+ i + API_KEY);
+//            DadosTemporada temporada = conversor.obterDados(json, DadosTemporada.class);
+//            listTemporadas.add(temporada);
+////            System.out.println(temporada);
+//        }
 
         //        json = consumoAPI.obterDados(URL+ nomeSerie.replace(" ", "+") +"&season="+ 1 + "&episode="+ 2 +API_KEY);
 //        DadosEpisodio episodio = conversor.obterDados(json, DadosEpisodio.class);
@@ -96,7 +108,7 @@ public class Principal {
 //        json = consumoAPI.obterDados(URL+ nomeSerie.replace(" ", "+") +"&season="+ 1 + "&episode="+ 1 +API_KEY);
 //        DadosTemporada temp = conversor.obterDados(json, DadosTemporada.class);
 //        System.out.println(episodio);
-        return serie;
+        return dadosS;
     }
 
 

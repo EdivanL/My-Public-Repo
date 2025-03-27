@@ -4,8 +4,10 @@ import com.colmenacloud.ScreenMatchEdivan.model.DadosEpisodio;
 import com.colmenacloud.ScreenMatchEdivan.model.DadosSerie;
 import com.colmenacloud.ScreenMatchEdivan.model.DadosTemporada;
 import com.colmenacloud.ScreenMatchEdivan.principal.Principal;
+import com.colmenacloud.ScreenMatchEdivan.repository.SerieRespository;
 import com.colmenacloud.ScreenMatchEdivan.service.ConsumoAPI;
 import com.colmenacloud.ScreenMatchEdivan.service.ConverteDados;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,10 +23,14 @@ public class ScreenMatchEdivanApplication implements CommandLineRunner {
 		SpringApplication.run(ScreenMatchEdivanApplication.class, args);
 	}
 
+	@Autowired
+	private SerieRespository repositorio;
+
+
 	@Override
 	public void run(String... args) throws Exception {
 
-		Principal principal = new Principal();
+		Principal principal = new Principal(repositorio);
 		principal.exibeMenu();
 
 
