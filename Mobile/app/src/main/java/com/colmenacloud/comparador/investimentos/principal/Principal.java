@@ -1,4 +1,7 @@
-package com.colmenacloud.comparador.investimentos.princpipal;
+package com.colmenacloud.comparador.investimentos.principal;
 
 public class Principal {
+    public String exibirMensagem() {
+        return "Hello World";
+    }
 }

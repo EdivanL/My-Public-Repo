@@ -1,21 +1,38 @@
 package com.colmenacloud.ScreenMatchEdivan.model;
 
 public enum Categoria {
-    AÇÃO("Action"),
-    ROMANCE("Romance"),
-    COMEDIA("Comedy"),
-    CRIME ("Crime"),
-    DRAMA("Drama"),
-    TERROR("Horror");
+    AÇÃO("Action", "Ação"),
+    ROMANCE("Romance", "Romance"),
+    COMEDIA("Comedy", "Comédia"),
+    CRIME ("Crime", "Crime"),
+    DRAMA("Drama", "Drama"),
+    TERROR("Horror", "Terror"),
+    AVENTURA("Adventure", "Aventura");
 
     private String categoriaOmdb;
-    Categoria(String categoriaOmdb){
+    private String categoriaPortugues;
+
+
+    Categoria(String categoriaOmdb, String categoriaPortugues){
         this.categoriaOmdb = categoriaOmdb;
+        this.categoriaPortugues = categoriaPortugues;
     }
 
     public static Categoria fromString(String text) {
         for (Categoria categoria : Categoria.values()) {
             if (categoria.categoriaOmdb.equalsIgnoreCase(text)) {
+                return categoria;
+            }
+        }
+        throw new IllegalArgumentException("Nenhuma categoria encontrada para a string fornecida: " + text);
+    }
+
+
+
+
+    public static Categoria fromPortugues(String text) {
+        for (Categoria categoria : Categoria.values()) {
+            if (categoria.categoriaPortugues.equalsIgnoreCase(text)) {
                 return categoria;
             }
         }
